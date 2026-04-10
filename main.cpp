@@ -71,9 +71,14 @@ struct appointment
 }app[SIZE];
 
 void signUp(int, int&, int&, int&, student[], staff[], administration[]);
-void signIn(int, int, int, int, student[], staff[], administration[]);
-void addCourses(int&, course[]);
+void signIn(int, int, int, int, int&, student[], staff[], administration[]);
+void addCourse(int&, course[]);
 void viewCourses(int, course[]);
+void removeCourse(int&, course[]);
+void selectCourse(int, staff[]);
+void stuMenu();
+void stfMenu(int);
+void admMenu(int&, course[]);
 long long int generateID();
 string getPassword();
 
@@ -101,7 +106,7 @@ int main()
 		signUp(choice,numOfStu, numOfStf, numOfAdm, stu, stf, adm);
 		break;
 	case 2:
-		signIn(choice,numOfStu, numOfStf, numOfAdm, stu, stf, adm);
+		signIn(choice, numOfStu, numOfStf, numOfAdm, numOfCou, stu, stf, adm);
 		break;
 	case 0:
 		cout << "Exiting..." << endl;
@@ -147,8 +152,6 @@ void signUp(int choice,int& numOfStu, int& numOfstf, int& numOfAdm, student stu[
 		break;
 
 	case 2:
-	{
-		int courseCount = 0;
 		stf[numOfstf].inf.id = generateID();
 		cout << "Your generated ID: " << stf[numOfstf].inf.id << endl;
 		cout << "Enter your full name (3 parts): ";
@@ -157,22 +160,10 @@ void signUp(int choice,int& numOfStu, int& numOfstf, int& numOfAdm, student stu[
 		cout << "Enter your password: "; cin >> stf[numOfstf].inf.password;
 		cout << "Enter your department: "; cin >> stf[numOfstf].department;
 		cout << "Enter your position: "; cin >> stf[numOfstf].position;
-		cout << "Enter your teaching courses (press 'Enter' to finish): ";
-		string temp;
-		cin.ignore();
-
-		for (int courseCount = 0; courseCount < 10; courseCount++)
-		{
-  	 		cout << "Course " << courseCount + 1 << ": ";
-    		getline(cin, temp);
-    		if (temp == "") break;
-    		stf[numOfstf].teachingCourses[courseCount] = temp;
-		}
-
 		cout << "\nStaff member registered successfully!\n";
 		numOfstf++;
 		break;
-	}
+
 	case 3:
 		adm[numOfAdm].inf.id = generateID();
 		cout << "Your generated ID is: " << adm[numOfAdm].inf.id << endl;
@@ -193,7 +184,7 @@ long long int generateID() {
 	return idCounter++;
 }
 
-void signIn(int choice, int numOfStu, int numOfStf, int numOfAdm, student stu[], staff stf[], administration adm[])
+void signIn(int choice, int numOfStu, int numOfStf, int numOfAdm, int& numOfCou, student stu[], staff stf[], administration adm[])
 {
     do {
 		cout << "====== Sign In Menu ======" << endl;
@@ -204,11 +195,12 @@ void signIn(int choice, int numOfStu, int numOfStf, int numOfAdm, student stu[],
 		cout << "[0] - Back\n";
 		cout << "-------------------------------------------\n";
 		cout << "Enter your choice: ";
+		cin >> choice;
 
-        if (choice != 1 && choice != 2 && choice != 3)
+        if (choice != 1 && choice != 2 && choice != 3 && choice != 0)
             cout << "Invalid choice! Please try again.\n";
 
-    } while (choice != 1 && choice != 2 && choice != 3);
+    } while (choice != 1 && choice != 2 && choice != 3 && choice != 0);
 
 	if (choice == 0) return;
 
@@ -235,6 +227,7 @@ void signIn(int choice, int numOfStu, int numOfStf, int numOfAdm, student stu[],
                 {
                     cout << "Welcome " << stu[i].inf.name << endl;
                     loggedIn = true;
+					stuMenu();
                     break;
                 }
             }
@@ -247,6 +240,7 @@ void signIn(int choice, int numOfStu, int numOfStf, int numOfAdm, student stu[],
                 {
                     cout << "Welcome " << stf[i].inf.name << endl;
                     loggedIn = true;
+					stfMenu(i);
                     break;
                 }
             }
@@ -259,6 +253,7 @@ void signIn(int choice, int numOfStu, int numOfStf, int numOfAdm, student stu[],
                 {
                     cout << "Welcome " << adm[i].inf.name << endl;
                     loggedIn = true;
+					admMenu(numOfCou, cou);
                     break;
                 }
             }
@@ -293,7 +288,127 @@ string getPassword()
 	return password;
 }
 
-void addCourses(int &numOfCou, course cou[])
+void stuMenu()
+{
+	do
+	{
+	cout << "====== Student Dashboard ======" << endl;
+	cout << "[1] - Course Registration" << endl;
+	cout << "[2] - Request Grades" << endl;
+	cout << "[3] - Request Appointment with Staff Members" << endl;
+	cout << "[0] - Logout" << endl;
+	cout << "-------------------------------------------\n";
+	cout << "Enter your choice: ";
+	cin >> choice;
+
+	if (choice != 1 && choice != 2 && choice != 3 && choice != 0)
+        cout << "Invalid choice! Please try again\n";
+
+    } while (choice != 1 && choice != 2 && choice != 3 && choice != 0);
+
+	switch (choice)
+	{
+	case 1:
+		/* Student Add Courses func */
+		break;
+	
+	case 2:
+		/* Student Request grades func */
+		break;
+	
+	case 3:
+		/* Student Request Appoi. func */
+		break;
+
+	case 0:
+		return;
+	}
+}
+
+void stfMenu(int stfIndex)
+{
+do
+	{
+	cout << "====== Staff Dashboard ======" << endl;
+	cout << "[1] - Set Grades" << endl;
+	cout << "[2] - View Appointments" << endl;
+	cout << "[3] - Select Courses to Teach" << endl;
+	cout << "[0] - Logout" << endl;
+	cout << "-------------------------------------------\n";
+	cout << "Enter your choice: ";
+	cin >> choice;
+
+	if (choice != 1 && choice != 2 && choice != 3 && choice != 0)
+        cout << "Invalid choice! Please try again\n";
+
+    } while (choice != 1 && choice != 2 && choice != 3 && choice != 0);
+
+	switch (choice)
+	{
+	case 1:
+
+		break;
+	
+	case 2:
+		break;
+	
+	case 3:
+		selectCourse(stfIndex, stf);
+		break;
+
+	case 0:
+		return;
+	}
+}
+
+void admMenu(int &numOfCou, course cou[])
+{
+	do
+	{
+	cout << "====== Administration Dashboard ======" << endl;
+	cout << "[1] - Add Course" << endl;
+	cout << "[2] - Remove Course" << endl;
+	cout << "[3] - View Courses" << endl;
+	cout << "[4] - Add Course Schedule" << endl;
+	cout << "[5] - Add Exam Schedule" << endl;
+	cout << "[0] - Logout" << endl;
+	cout << "-------------------------------------------\n";
+	cout << "Enter your choice: ";
+	cin >> choice;
+
+	if (choice != 1 && choice != 2 && choice != 3 && choice != 4 && choice != 5 && choice != 0)
+        cout << "Invalid choice! Please try again\n";
+
+    } while (choice != 1 && choice != 2 && choice != 3 && choice != 0);
+
+	switch (choice)
+	{
+	case 1:
+		addCourse(numOfCou, cou);
+		break;
+	
+	case 2:
+		removeCourse(numOfCou, cou);
+		break;
+	
+	case 3:
+		viewCourses(numOfCou, cou);
+		break;
+
+	case 4:
+		/* Admin Add Course Schedules func */
+		break;
+	
+	case 5:
+		/* Admin Add Exam Schedule func */
+		break;
+
+	case 0:
+		return;
+	}
+}
+
+void addCourse(int &numOfCou, course cou[])
 {
 	char cont;
 
@@ -334,10 +449,11 @@ void addCourses(int &numOfCou, course cou[])
 
 void viewCourses(int numOfCou,course cou[])
 {
-	cout << "\n========= Courses =========" << endl;
+	cout << "====== Courses ======" << endl;
 	for (int j = 0; j < numOfCou; j++)
 	{
-		cout << "\nCourse " << "[" << j + 1 << "]" << endl;
+		cout << "Course " << "[" << j + 1 << "]" << endl;
+
 		cout << "Name: " << cou[j].name << endl;
 		cout << "Total Marks: " << cou[j].gr.total << endl;
 		cout << "Final Marks: " << cou[j].gr.final << endl;
@@ -347,4 +463,41 @@ void viewCourses(int numOfCou,course cou[])
 
 		cout << "\n-\n";
 	}
+}
+
+void removeCourse(int &numOfCou, course cou[])
+{
+	string remCourse;
+	cout << "Enter Course you want to remove: ";
+	cin.ignore();
+	getline(cin,remCourse);
+
+	for (int i = 0; i < numOfCou; i++)
+	{
+		if (remCourse == cou[i].name)
+		{
+            for (int j = i; j < numOfCou - 1; j++)
+            {
+                cou[j] = cou[j + 1];
+            }
+            numOfCou--;
+            cout << "Course removed successfully!\n";
+            return;
+		}
+        }
+    }
+
+void selectCourse(int stfIndex, staff stf[])
+{
+	int courseCount = 0;
+	cout << "Enter your teaching courses (press 'Enter' to finish): ";
+		string temp;
+		cin.ignore();
+		for (int courseCount = 0; courseCount < 10; courseCount++)
+		{
+    		getline(cin, temp);
+    		if (temp == "") break;
+    		stf[stfIndex].teachingCourses[courseCount] = temp;
+		}
+		cout << "Courses added successfully!" << endl;
 }
